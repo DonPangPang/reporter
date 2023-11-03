@@ -1,0 +1,9 @@
+﻿@foreach (var item in Works)
+{
+    <WorkListItem Work="item"></WorkListItem>
+}
+
+@code {
+    [Parameter] 
+    public List<Work> Works { get; set; } = new List<Work>();
+}

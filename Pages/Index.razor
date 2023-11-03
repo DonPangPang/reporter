@@ -1,0 +1,30 @@
+@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<WorkList Works="_works"></WorkList>
+
+<style>
+
+</style>
+
+@code{
+
+    readonly List<Work> _works = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            var work = new Work()
+            {
+                Content = $"{i}AAAAAAAA",
+            };
+            work.Groups.Add(new Group(){Name = $"{i}AAA"});
+            work.Tags.Add(new Tag() { Name = $"{i}BBB" });
+            work.Tags.Add(new Tag() { Name = $"{i}CCC" });
+            _works.Add(work);
+        }
+        return base.OnInitializedAsync();
+    }
+}

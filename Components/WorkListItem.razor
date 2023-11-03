@@ -1,0 +1,70 @@
+﻿<MCard Style="margin-bottom: 10px" OnClick="HandleStatus" Elevation="@_eve" Color="@(_disabled ? "grey":"white")">
+    <MCardSubtitle>@DateRange</MCardSubtitle>
+    <MCardText>
+        <div>
+            @foreach (var group in Work.Groups)
+            {
+                <MChip Class="ma-2"
+                       Color="pink"
+                       TextColor="white"
+                       Label>
+                    <MIcon Left>
+                        mdi-label
+                    </MIcon>
+                    @group.Name
+                </MChip>
+            }
+        </div>
+        <div>
+            @foreach (var tag in Work.Tags)
+            {
+                <MChip Class="ma-2"
+                       Color="pink"
+                       TextColor="white"
+                       Label XSmall>
+                    @tag.Name
+                </MChip>
+            }
+        </div>
+        <div>@Work.Content</div>
+    </MCardText>
+    @* <MCardSubtitle>@DateRange</MCardSubtitle> *@
+</MCard>
+
+
+@code {
+
+    [Parameter]
+    public Work Work { get; set; } = new();
+
+    string DateRange => $"{Work.StartTime:yyyy-MM-dd HH:mm}-{Work.EndTime:yyyy-MM-dd HH:mm}";
+
+    bool _disabled = false;
+
+    void HandleStatus()
+    {
+        _disabled = !_disabled;
+
+        if(!_disabled)
+            Enabled();
+        else
+            Disabled();
+
+
+        StateHasChanged();
+    }
+
+    string _eve = "5";
+
+    void Disabled()
+    {
+        _disabled = true;
+        _eve = "1";
+    }
+
+    void Enabled()
+    {
+        _disabled = false;
+        _eve = "5";
+    }
+}
