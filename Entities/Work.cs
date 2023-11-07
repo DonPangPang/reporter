@@ -8,7 +8,8 @@ public class Work : EntityBase
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 
-    public ICollection<Group> Groups { get; set; } = new List<Group>();
+    public Guid? GroupId { get; set; }
+    public Group? Group { get; set; }
     public ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
     public WorkStatus Status { get; set; } = WorkStatus.Working;

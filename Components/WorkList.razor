@@ -1,9 +1,46 @@
-﻿@foreach (var item in Works)
+﻿@foreach (var item in Works.Where(x => x.Status == WorkStatus.Working))
 {
     <WorkListItem Work="item"></WorkListItem>
 }
 
+<MChip Label class="re-group-chip" OnClick="HandleOpenFinished" Color="grey lighten-3">
+    <MIcon Left>
+        @openFinishedMenuIcon
+    </MIcon>
+    已完成
+</MChip>
+
+@if(isOpenFinished)
+{
+    @foreach (var item in Works.Where(x => x.Status == WorkStatus.Finished))
+    {
+        <WorkListItem Work="item"></WorkListItem>
+    }
+}
+
+<style>
+    .re-group-chip {
+        margin: 15px 0;
+    }
+</style>
+
 @code {
-    [Parameter] 
+    bool visable = false;
+
+    [Parameter]
     public List<Work> Works { get; set; } = new List<Work>();
+
+
+    bool isOpenFinished = false;
+    string openFinishedMenuIcon => isOpenFinished ? "mdi mdi-menu-down":"mdi mdi-menu-right";
+
+    void HandleOpenFinished()
+    {
+        isOpenFinished = !isOpenFinished;
+        StateHasChanged();
+    }
+
+    void Refresh(){
+        StateHasChanged();
+    }
 }

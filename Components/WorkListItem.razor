@@ -1,49 +1,58 @@
-﻿<MCard Style="margin-bottom: 10px" OnClick="HandleStatus" Elevation="@_eve" Color="@(_disabled ? "grey":"white")">
-    <MCardSubtitle>@DateRange</MCardSubtitle>
+﻿<MCard OnClick="HandleItemDetail" class="re-task-item" Elevation="5" Color="@(_disabled ? "grey":"white")" Ripple
+   >
+    @* <MCardText>
+        <MRow class="re-cbx">
+        <MCol Sm="1" Align="AlignTypes.Center">
+            <MCheckbox class="re-cbx" OnIcon="mdi mdi-radiobox-marked" OffIcon="mdi mdi-radiobox-blank" @bind-Value="Work.Status" TrueValue="WorkStatus.Finished" FalseValue="WorkStatus.Working"
+        OnClick="()=>{}"></MCheckbox>
+        </MCol>
+        <MCol Sm="10" Align="AlignTypes.Center">
+            @Work.Content
+        </MCol>
+    </MRow>
+    </MCardText> *@
     <MCardText>
-        <div>
-            @foreach (var group in Work.Groups)
-            {
-                <MChip Class="ma-2"
-                       Color="pink"
-                       TextColor="white"
-                       Label>
-                    <MIcon Left>
-                        mdi-label
-                    </MIcon>
-                    @group.Name
-                </MChip>
-            }
-        </div>
-        <div>
-            @foreach (var tag in Work.Tags)
-            {
-                <MChip Class="ma-2"
-                       Color="pink"
-                       TextColor="white"
-                       Label XSmall>
-                    @tag.Name
-                </MChip>
-            }
-        </div>
-        <div>@Work.Content</div>
+        <CheckBox Checked="@isFinished"></CheckBox>
     </MCardText>
-    @* <MCardSubtitle>@DateRange</MCardSubtitle> *@
 </MCard>
 
+<PDrawer Width="500" @bind-Value="visable"
+    OnCancel="()=>visable = false">
+    <ChildContent>
+        Content
+    </ChildContent>
+</PDrawer>
+
+
+<style>
+    .re-task-item{
+        margin-top: 15px;
+    }
+
+    .re-task-item .re-cbx > *{
+        @* float: left; *@
+        @* background-color:red; *@
+        margin-left: 10px;
+    }
+</style>
 
 @code {
+
+    bool isFinished => Work.Status == WorkStatus.Finished;
 
     [Parameter]
     public Work Work { get; set; } = new();
 
+    [Parameter]
+    public EventCallback OnClick{get; set;}
     string DateRange => $"{Work.StartTime:yyyy-MM-dd HH:mm}-{Work.EndTime:yyyy-MM-dd HH:mm}";
 
     bool _disabled = false;
 
     void HandleStatus()
     {
-        _disabled = !_disabled;
+        Work.Status = isFinished ? WorkStatus.Working : WorkStatus.Finished;
+        @* _disabled = !_disabled;
 
         if(!_disabled)
             Enabled();
@@ -51,20 +60,18 @@
             Disabled();
 
 
+        StateHasChanged(); *@
+        Refresh();
+    }
+
+    bool visable = false;
+
+    void HandleItemDetail()
+    {
+        visable = true;
+    }
+
+    void Refresh(){
         StateHasChanged();
-    }
-
-    string _eve = "5";
-
-    void Disabled()
-    {
-        _disabled = true;
-        _eve = "1";
-    }
-
-    void Enabled()
-    {
-        _disabled = false;
-        _eve = "5";
     }
 }

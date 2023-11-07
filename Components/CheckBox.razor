@@ -1,0 +1,42 @@
+﻿<div class="@(Checked ? "text-decoration-line-through": "")">
+    <div @onclick:stopPropagation="true" style="display:inline-block">
+        <MButton Icon OnClick="HandleChanged" Color="@realColor">
+            <MIcon>
+                @icon
+            </MIcon>
+        </MButton>
+    </div>
+    <span>@Label</span>
+</div>
+
+@code {
+    string icon => Checked ? "mdi mdi-radiobox-marked" : "mdi mdi-radiobox-blank";
+
+    string realColor => Checked ? Color : "grey";
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    //OnIcon="mdi mdi-radiobox-marked" OffIcon="mdi mdi-radiobox-blank"
+    [Parameter]
+    public bool Checked { get; set; } = false;
+
+    [Parameter]
+    public string Color { get; set; } = "red";
+
+    [Parameter]
+    public string Label { get; set; } = "123456";
+
+
+    void HandleChanged()
+    {
+        Checked = !Checked;
+
+        Refresh();
+    }
+
+    void Refresh()
+    {
+        StateHasChanged();
+    }
+}

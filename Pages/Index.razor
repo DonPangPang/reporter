@@ -8,7 +8,7 @@
 
 </style>
 
-@code{
+@code {
 
     readonly List<Work> _works = new();
 
@@ -17,10 +17,11 @@
         for (var i = 0; i < 10; i++)
         {
             var work = new Work()
-            {
-                Content = $"{i}AAAAAAAA",
-            };
-            work.Groups.Add(new Group(){Name = $"{i}AAA"});
+                {
+                    Content = $"今天要完成的事情{i}, 是这个样子的",
+                    Status = i % 2 == 0 ? WorkStatus.Working : WorkStatus.Finished
+                };
+            work.Group = new Group() { Name = $"{i}AAA" };
             work.Tags.Add(new Tag() { Name = $"{i}BBB" });
             work.Tags.Add(new Tag() { Name = $"{i}CCC" });
             _works.Add(work);
